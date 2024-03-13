@@ -6,17 +6,36 @@
 
     <record model="ir.ui.view" id="product_product_form_view">
         <field name="model">product.product</field>
-        <field name="inherit_id" ref="TODO othermodule.form_view"/>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
         <field name="arch" type="xml">
-            <!-- TODO -->
+            <div name="options" position="inside">
+                <span class="d-inline-block">
+                    <field name="is_book"/>
+                    <label for="is_book"/>
+                </span>
+            </div>
+
+            <field name="barcode" position="after">
+                <field name="isbn"/>
+            </field>
+
+            <page name="general_information" position="after">
+                <page name="book" string="Detalhes do Livro" attrs="{'invisible': [('is_book', '=', False)]}">
+                    <group>
+                        <field name="editor_id" />
+                    </group>
+                    <field name="author_ids"/>
+                </page>
+            </page>
         </field>
     </record>
 
+    <!--
     <record model="ir.ui.view" id="product_product_search_view">
         <field name="model">product.product</field>
         <field name="inherit_id" ref="TODO othermodule.search_view"/>
         <field name="arch" type="xml">
-            <!-- TODO -->
+            
         </field>
     </record>
 
@@ -24,12 +43,12 @@
         <field name="model">product.product</field>
         <field name="inherit_id" ref="TODO othermodule.tree_view"/>
         <field name="arch" type="xml">
-            <!-- TODO -->
+            
         </field>
     </record>
 
     <record model="ir.actions.act_window" id="product_product_act_window">
-        <field name="name">Product Product</field> <!-- TODO -->
+        <field name="name">Product product</field> 
         <field name="res_model">product.product</field>
         <field name="view_mode">tree,form</field>
         <field name="domain">[]</field>
@@ -37,10 +56,17 @@
     </record>
 
     <record model="ir.ui.menu" id="product_product_menu">
-        <field name="name">Product Product</field>
-        <field name="parent_id" ref="xmlid of parent menu"/> <!-- TODO -->
+        <field name="name">Product product</field>
+        <field name="parent_id" ref="xmlid of parent menu"/> 
         <field name="action" ref="product_product_act_window"/>
-        <field name="sequence" eval="16"/> <!-- TODO -->
+        <field name="sequence" eval="16"/> 
+    </record> -->
+
+    <record model="ir.ui.menu" id="product_product_menu">
+        <field name="name">Livros</field>
+        <field name="parent_id" ref="book_submenu_general"/>
+        <field name="action" ref="product.product_normal_action"/>
+        <field name="sequence" eval="10"/>
     </record>
 
 </odoo>

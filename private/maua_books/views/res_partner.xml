@@ -4,43 +4,93 @@
 
 <odoo>
 
-    <record model="ir.ui.view" id="res_partner_form_view">
+    <record model="ir.ui.view" id="res_partner_book_form_view">
+        <field name="name">res.partner.form (in book_product)</field>
         <field name="model">res.partner</field>
-        <field name="inherit_id" ref="TODO othermodule.form_view"/>
+        <field name="mode">primary</field>
+        <field name="priority"
+               eval="100"/> <!-- Será criada uma view separada da principal, ou seja as customizações não vão aparecer na principal -->
+        <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
-            <!-- TODO -->
+            <field name="category_id" position="after">
+                <field name="is_publisher"/>
+                <field name="is_author"/>
+            </field>
+            <page name="contact_addresses" position="before">
+                <page name="author" autofocus="autofocus" string="Livros do Autor"
+                      attrs="{'invisible': [('is_author', '=', False)]}">
+                    <field name="author_book_ids"/>
+                </page>
+                <page name="publisher" string="Livros da Editora"
+                      attrs="{'invisible': [('is_publisher', '=', False)]}">
+                    <field name="editor_book_ids"/>
+                </page>
+            </page>
         </field>
     </record>
 
-    <record model="ir.ui.view" id="res_partner_search_view">
-        <field name="model">res.partner</field>
-        <field name="inherit_id" ref="TODO othermodule.search_view"/>
-        <field name="arch" type="xml">
-            <!-- TODO -->
-        </field>
-    </record>
-
-    <record model="ir.ui.view" id="res_partner_tree_view">
-        <field name="model">res.partner</field>
-        <field name="inherit_id" ref="TODO othermodule.tree_view"/>
-        <field name="arch" type="xml">
-            <!-- TODO -->
-        </field>
-    </record>
-
-    <record model="ir.actions.act_window" id="res_partner_act_window">
-        <field name="name">Res Partner</field> <!-- TODO -->
+    <record model="ir.actions.act_window" id="res_partner_publisher_act_window">
+        <field name="name">Editora</field>
         <field name="res_model">res.partner</field>
         <field name="view_mode">tree,form</field>
-        <field name="domain">[]</field>
-        <field name="context">{}</field>
+        <field name="domain">[('is_publisher', '=', True)]</field>
+        <field name="context">{'default_is_publisher': True}</field>
     </record>
 
-    <record model="ir.ui.menu" id="res_partner_menu">
-        <field name="name">Res Partner</field>
-        <field name="parent_id" ref="xmlid of parent menu"/> <!-- TODO -->
-        <field name="action" ref="res_partner_act_window"/>
-        <field name="sequence" eval="16"/> <!-- TODO -->
+   <record id="res_partner_publisher_act_tree" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="act_window_id" ref="res_partner_publisher_act_window"/>
+        <field name="view_id" ref="base.view_partner_tree"/>
     </record>
+
+    <record id="res_partner_publisher_act_form" model="ir.actions.act_window.view">
+        <field name="sequence" eval="10"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="res_partner_book_form_view"/>
+        <field name="act_window_id" ref="res_partner_publisher_act_window"/>
+    </record>
+
+
+    <menuitem
+        id="res_partner_menu_publisher"
+        name="Editora"
+        parent="book_submenu_general"
+        sequence="20"
+        action="res_partner_publisher_act_window"
+    />
+
+
+    <record model="ir.actions.act_window" id="res_partner_autor_act_window">
+        <field name="name">Autor</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('is_author', '=', True)]</field>
+        <field name="context">{'default_is_author': True}</field>
+    </record>
+
+    <record id="res_partner_autor_act_tree" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="act_window_id" ref="res_partner_autor_act_window"/>
+        <field name="view_id" ref="base.view_partner_tree"/>
+    </record>
+
+    <record id="res_partner_autor_act_form" model="ir.actions.act_window.view">
+        <field name="sequence" eval="10"/>
+        <field name="view_mode">form</field>
+        <field name="act_window_id" ref="res_partner_autor_act_window"/>
+        <field name="view_id" ref="res_partner_book_form_view"/>
+    </record>
+
+
+    <menuitem
+        id="res_partner_menu_autor"
+        name="Autor"
+        parent="book_submenu_general"
+        sequence="50"
+        action="res_partner_autor_act_window"
+    />
+
 
 </odoo>

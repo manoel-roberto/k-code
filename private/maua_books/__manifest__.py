@@ -17,8 +17,9 @@
         #'security/product_product.xml',
         #'security/res_partner.xml',
         #
-        #'views/product_product.xml',
-        #'views/res_partner.xml',
+        'views/main_menu.xml',
+        'views/product_product.xml',
+        'views/res_partner.xml',
     ],
     'demo': [
         #'demo/product_product.xml',
